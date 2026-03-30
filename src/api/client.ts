@@ -34,8 +34,6 @@ apiClient.interceptors.response.use(
   (error) => {
     if (axios.isAxiosError(error)) {
       const status = error.response?.status;
-      const data = error.response?.data as { message?: string } | undefined;
-      const message = data?.message || error.message;
 
       const requestUrl = error.config?.url || '';
       const isAuthEndpoint =
@@ -49,8 +47,6 @@ apiClient.interceptors.response.use(
         if (window.location.pathname !== '/login') {
           window.location.href = '/login';
         }
-      } else if (status === 409) {
-        toast.error(message || 'Конфлікт — ресурс вже існує.');
       } else if (status && status >= 500) {
         toast.error('Помилка сервера. Спробуйте пізніше.');
       } else if (!error.response) {

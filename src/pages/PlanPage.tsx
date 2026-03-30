@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
+import { useAuth } from '../auth/useAuth';
 import { getCurrentPlan, updatePlanItemStatus } from '../api/plans';
 import type {
   PlanResponse,
@@ -46,6 +47,7 @@ const audienceLabels: Record<string, string> = {
 
 export function PlanPage() {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   const {
     data: plan,
@@ -53,8 +55,9 @@ export function PlanPage() {
     isError,
     error,
   } = useQuery<PlanResponse>({
-    queryKey: ['currentPlan'],
+    queryKey: ['currentPlan', user?.id],
     queryFn: getCurrentPlan,
+    enabled: !!user?.id,
   });
 
   const statusMutation = useMutation({
@@ -66,11 +69,11 @@ export function PlanPage() {
       status: PlanItemResponse['status'];
     }) => updatePlanItemStatus(planItemId, { status }),
     onMutate: async ({ planItemId, status }) => {
-      await queryClient.cancelQueries({ queryKey: ['currentPlan'] });
+      await queryClient.cancelQueries({ queryKey: ['currentPlan', user?.id] });
 
-      const previous = queryClient.getQueryData<PlanResponse>(['currentPlan']);
+      const previous = queryClient.getQueryData<PlanResponse>(['currentPlan', user?.id]);
 
-      queryClient.setQueryData<PlanResponse>(['currentPlan'], (old) => {
+      queryClient.setQueryData<PlanResponse>(['currentPlan', user?.id], (old) => {
         if (!old) return old;
         return {
           ...old,
@@ -87,12 +90,12 @@ export function PlanPage() {
     },
     onError: (_err, _vars, context) => {
       if (context?.previous) {
-        queryClient.setQueryData(['currentPlan'], context.previous);
+        queryClient.setQueryData(['currentPlan', user?.id], context.previous);
       }
       toast.error('Не вдалося оновити статус.');
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['currentPlan'] });
+      queryClient.invalidateQueries({ queryKey: ['currentPlan', user?.id] });
     },
   });
 

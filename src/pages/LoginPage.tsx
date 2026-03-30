@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useAuth } from '../auth/useAuth';
-import axios from 'axios';
+
 import toast from 'react-hot-toast';
 
 const loginSchema = z.object({
@@ -33,9 +33,7 @@ export function LoginPage() {
       await login(data);
       navigate('/dashboard');
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.status === 401) {
-        toast.error('Невірний email або пароль.');
-      }
+      toast.error('Невірний email або пароль.');
     } finally {
       setIsSubmitting(false);
     }

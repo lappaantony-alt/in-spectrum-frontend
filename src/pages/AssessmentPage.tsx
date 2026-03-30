@@ -4,11 +4,13 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { getAssessmentTemplate, createAssessment } from '../api/assessments';
 import { generatePlan } from '../api/plans';
+import { useAuth } from '../auth/useAuth';
 import type { AssessmentTemplate } from '../api/types';
 
 export function AssessmentPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { user } = useAuth();
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [validationErrors, setValidationErrors] = useState<Set<string>>(new Set());
 
@@ -29,8 +31,8 @@ export function AssessmentPage() {
       return assessment;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['currentPlan'] });
-      queryClient.invalidateQueries({ queryKey: ['latestAssessment'] });
+      queryClient.invalidateQueries({ queryKey: ['currentPlan', user?.id] });
+      queryClient.invalidateQueries({ queryKey: ['latestAssessment', user?.id] });
       toast.success('Оцінювання подано! Ваш план створено.');
       navigate('/plan');
     },

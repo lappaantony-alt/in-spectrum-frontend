@@ -14,8 +14,9 @@ export function DashboardPage() {
     isLoading: isAssessmentLoading,
     isError: isAssessmentError,
   } = useQuery<AssessmentResponse>({
-    queryKey: ['latestAssessment'],
+    queryKey: ['latestAssessment', user?.id],
     queryFn: getLatestAssessment,
+    enabled: !!user?.id,
   });
 
   const {
@@ -24,8 +25,9 @@ export function DashboardPage() {
     isError: isPlanError,
     error: planError,
   } = useQuery<PlanResponse>({
-    queryKey: ['currentPlan'],
+    queryKey: ['currentPlan', user?.id],
     queryFn: getCurrentPlan,
+    enabled: !!user?.id,
   });
 
   const planIs404 =
