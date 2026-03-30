@@ -71,6 +71,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
     toast.success('Ви вийшли.');
   }, []);
 
+  const refreshUser = useCallback((updatedUser: UserResponse) => {
+    setUser(updatedUser);
+  }, []);
+
   return (
     <AuthContext.Provider
       value={{
@@ -81,6 +85,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         login,
         register,
         logout,
+        refreshUser,
       }}
     >
       {children}

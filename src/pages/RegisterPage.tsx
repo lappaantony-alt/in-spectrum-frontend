@@ -75,7 +75,7 @@ export function RegisterPage() {
                 id="name"
                 type="text"
                 autoComplete="name"
-                placeholder="Jane Smith"
+                placeholder="Іван Петренко"
                 className={`input ${errors.name ? 'input-error' : ''}`}
                 {...register('name')}
               />
