@@ -81,13 +81,13 @@ export function LoginPage() {
             {/* Password */}
             <div>
               <label htmlFor="password" className="label">
-                Password
+                Пароль
               </label>
               <input
                 id="password"
                 type="password"
                 autoComplete="current-password"
-                placeholder="Enter your password"
+                placeholder="Введіть ваш пароль"
                 className={`input ${errors.password ? 'input-error' : ''}`}
                 {...register('password')}
               />

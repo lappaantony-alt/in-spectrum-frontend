@@ -37,7 +37,12 @@ apiClient.interceptors.response.use(
       const data = error.response?.data as { message?: string } | undefined;
       const message = data?.message || error.message;
 
-      if (status === 401) {
+      const requestUrl = error.config?.url || '';
+      const isAuthEndpoint =
+        requestUrl.includes('/auth/login') ||
+        requestUrl.includes('/auth/sign-up');
+
+      if (status === 401 && !isAuthEndpoint) {
         localStorage.removeItem(TOKEN_KEY);
         toast.error('Сесія закінчилася. Будь ласка, увійдіть знову.');
 

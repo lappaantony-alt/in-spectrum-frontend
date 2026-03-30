@@ -6,6 +6,7 @@ const navLinks = [
   { to: '/dashboard', label: 'Головна' },
   { to: '/assessment', label: 'Оцінювання' },
   { to: '/plan', label: 'Мій план' },
+  { to: '/progress', label: 'Прогрес' },
 ];
 
 export function MainLayout() {
@@ -66,10 +67,10 @@ export function MainLayout() {
                 >
                   <div className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary-light">
                     <span className="text-sm font-semibold text-secondary-dark">
-                      {user?.name?.charAt(0)?.toUpperCase() || 'U'}
+                      {user?.name?.charAt(0)?.toUpperCase() || 'К'}
                     </span>
                   </div>
-                  <span>{user?.name || 'User'}</span>
+                  <span>{user?.name || 'Користувач'}</span>
                   <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
@@ -81,6 +82,13 @@ export function MainLayout() {
                       <p className="text-sm font-medium text-text-primary">{user?.name}</p>
                       <p className="text-xs text-text-secondary">{user?.email}</p>
                     </div>
+                    <Link
+                      to="/profile"
+                      onClick={() => setUserMenuOpen(false)}
+                      className="block w-full px-4 py-2 text-left text-sm text-text-primary transition-colors hover:bg-gray-50"
+                    >
+                      Профіль
+                    </Link>
                     <button
                       id="logout-button"
                       onClick={handleLogout}
@@ -136,7 +144,7 @@ export function MainLayout() {
               <div className="mb-2 flex items-center gap-2">
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary-light">
                   <span className="text-sm font-semibold text-secondary-dark">
-                    {user?.name?.charAt(0)?.toUpperCase() || 'U'}
+                    {user?.name?.charAt(0)?.toUpperCase() || 'К'}
                   </span>
                 </div>
                 <div>
@@ -144,6 +152,13 @@ export function MainLayout() {
                   <p className="text-xs text-text-secondary">{user?.email}</p>
                 </div>
               </div>
+              <Link
+                to="/profile"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-text-primary transition-colors hover:bg-gray-50"
+              >
+                Профіль
+              </Link>
               <button
                 onClick={handleLogout}
                 className="w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-red-600 transition-colors hover:bg-red-50"
