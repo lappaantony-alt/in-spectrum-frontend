@@ -1,5 +1,7 @@
 # InSpectrum Frontend
 
+🚀 **Live Demo:** [https://inspectrum.up.railway.app](https://inspectrum.up.railway.app)
+
 ## Description
 This is the frontend application for the InSpectrum platform. It provides an intuitive, responsive, and accessible user interface for parents and educators to assess specific needs, generate personalized learning plans, view educational resources, and seamlessly track progress over time.
 
