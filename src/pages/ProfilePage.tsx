@@ -8,10 +8,11 @@ import { useAuth } from '../auth/useAuth';
 import { updateMe } from '../api/auth';
 import type { UserResponse } from '../api/types';
 import axios from 'axios';
+import { nameSchema, phoneSchema } from '../lib/validations';
 
 const profileSchema = z.object({
-  name: z.string().min(2, "Ім'я повинно містити щонайменше 2 символи"),
-  phoneNumber: z.string().min(7, 'Будь ласка, введіть коректний номер телефону'),
+  name: nameSchema,
+  phoneNumber: phoneSchema,
 });
 
 type ProfileFormData = z.infer<typeof profileSchema>;

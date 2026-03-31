@@ -2,6 +2,7 @@ import { useParams, Link } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import { getResourceById } from '../api/resources';
 import type { ResourceResponse } from '../api/types';
+import { getLocalVideoUrl } from '../lib/videoMapping';
 
 const typeConfig: Record<string, { label: string; icon: string; color: string; bg: string }> = {
   VIDEO: { label: 'Відео', icon: '🎬', color: 'text-secondary-dark', bg: 'bg-secondary-light' },
@@ -122,15 +123,26 @@ export function ResourcePage() {
       )}
 
       {/* Content — VIDEO type */}
-      {resource.type === 'VIDEO' && resource.url && (
+      {resource.type === 'VIDEO' && (getLocalVideoUrl(resource.title) || resource.url) && (
         <div className="card">
           <h2 className="mb-3 text-sm font-semibold text-text-primary">Відео</h2>
 
-          {/* YouTube / Vimeo embed detection */}
-          {isEmbeddableVideo(resource.url) ? (
+          {/* Local Video Match */}
+          {getLocalVideoUrl(resource.title) ? (
+            <div className="aspect-video overflow-hidden rounded-xl bg-black shadow-sm border border-gray-100">
+              <video
+                controls
+                src={getLocalVideoUrl(resource.title)!}
+                className="h-full w-full object-contain"
+              >
+                Ваш браузер не підтримує відео.
+              </video>
+            </div>
+          ) : isEmbeddableVideo(resource.url || '') ? (
+            /* YouTube / Vimeo embed detection */
             <div className="aspect-video overflow-hidden rounded-xl">
               <iframe
-                src={getEmbedUrl(resource.url)}
+                src={getEmbedUrl(resource.url || '')}
                 title={resource.title}
                 className="h-full w-full"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -139,7 +151,7 @@ export function ResourcePage() {
             </div>
           ) : (
             <a
-              href={resource.url}
+              href={resource.url || ''}
               target="_blank"
               rel="noopener noreferrer"
               className="group flex items-center gap-3 rounded-xl border border-gray-200 p-4 transition-all hover:border-primary/30 hover:shadow-sm"
