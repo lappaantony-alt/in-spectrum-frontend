@@ -33,6 +33,16 @@ apiClient.interceptors.response.use(
   },
   (error) => {
     if (axios.isAxiosError(error)) {
+      // Backend (Spring Boot) often returns 500 for NoSuchElementException 
+      // when a new user has no plan or assessment yet. 
+      // We map this to 404 so UI empty states work correctly and we avoid scary toasts.
+      if (
+        error.response?.status === 500 &&
+        error.config?.url?.match(/\/(plans\/current|assessments\/latest)$/)
+      ) {
+        error.response.status = 404;
+      }
+
       const status = error.response?.status;
 
       const requestUrl = error.config?.url || '';
