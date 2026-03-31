@@ -6,10 +6,11 @@ import { z } from 'zod';
 import { useAuth } from '../auth/useAuth';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { nameSchema, phoneSchema } from '../lib/validations';
 
 const registerSchema = z.object({
-  name: z.string().min(2, "Ім'я повинно містити щонайменше 2 символи"),
-  phoneNumber: z.string().min(7, 'Будь ласка, введіть коректний номер телефону'),
+  name: nameSchema,
+  phoneNumber: phoneSchema,
   email: z.string().email('Будь ласка, введіть коректний email'),
   password: z.string().min(6, 'Пароль повинен містити щонайменше 6 символів'),
   userType: z.enum(['PARENT', 'EDUCATOR'], {

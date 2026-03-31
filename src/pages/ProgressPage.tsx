@@ -180,10 +180,10 @@ export function ProgressPage() {
               </svg>
             </div>
             <h2 className="text-lg font-semibold text-text-primary">
-              Плану ще немає
+              Прогрес поки недоступний
             </h2>
             <p className="mt-1 text-sm text-text-secondary">
-              Пройдіть оцінювання, щоб отримати план і відстежувати прогрес.
+              Після створення плану та виконання завдань тут з’являться ваші записи прогресу.
             </p>
             <Link to="/assessment" className="btn-primary mt-5 inline-flex">
               Розпочати оцінювання
@@ -400,7 +400,18 @@ export function ProgressPage() {
                       id="progress-date"
                       type="date"
                       value={progressDate}
-                      onChange={(e) => setProgressDate(e.target.value)}
+                      onChange={(e) => {
+                        e.target.setCustomValidity('');
+                        setProgressDate(e.target.value);
+                      }}
+                      onInvalid={(e) => {
+                        const target = e.target as HTMLInputElement;
+                        if (target.validity.rangeOverflow) {
+                          target.setCustomValidity('Дата не може бути пізнішою за сьогоднішню');
+                        } else if (target.validity.valueMissing) {
+                          target.setCustomValidity('Будь ласка, оберіть дату.');
+                        }
+                      }}
                       max={getTodayString()}
                       className="input"
                       required

@@ -141,7 +141,7 @@ export function PlanPage() {
               </svg>
             </div>
             <h2 className="text-lg font-semibold text-text-primary">
-              Плану ще немає
+              План ще не створено
             </h2>
             <p className="mt-1 text-sm text-text-secondary">
               Пройдіть оцінювання, щоб отримати персоналізований навчальний план.

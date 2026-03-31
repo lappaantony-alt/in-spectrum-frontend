@@ -1,73 +1,79 @@
-# React + TypeScript + Vite
+# InSpectrum Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Description
+This is the frontend application for the InSpectrum platform. It provides an intuitive, responsive, and accessible user interface for parents and educators to assess specific needs, generate personalized learning plans, view educational resources, and seamlessly track progress over time.
 
-Currently, two official plugins are available:
+## Tech Stack
+- **React**: Component-based UI library.
+- **TypeScript**: Static typing for robust code and better developer experience.
+- **Vite**: Ultra-fast frontend build tool and development server.
+- **React Router**: Declarative routing for navigating between application views.
+- **TanStack Query (React Query)**: Powerful asynchronous state management and server state fetching.
+- **Axios**: Promise-based HTTP client for making API requests.
+- **Tailwind CSS**: Utility-first CSS framework for rapid UI styling.
+- **React Hook Form**: Performant, flexible, and extensible forms.
+- **Zod**: TypeScript-first schema declaration and input validation.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
+- **Authentication**: Secure user registration and login workflows for different user roles (Parents and Educators).
+- **Assessment Flow**: Dynamic questionnaire to evaluate specific needs and determine the most effective strategies.
+- **Plan Generation**: Automatic creation of personalized learning and action plans based on assessment results.
+- **Resource Details**: Access to a curated library of educational resources, guides, and practical materials.
+- **Progress Tracking**: Daily or weekly entry logging to monitor adherence to the plan and observe outcomes.
+- **Profile Management**: Capabilities to manage user account details and personal preferences.
 
-## React Compiler
+## Architecture Highlights
+- Centralized API client with Axios interceptors (auth + error handling)
+- React Query used for server state management with caching strategy
+- Global error handling via toast notifications
+- Form validation handled with Zod + React Hook Form
+- User-specific query isolation to prevent data leakage between sessions
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Project Structure
+A brief overview of the main directories in `src/`:
+- `api/`: Centralized Axios client, OpenAPI type definitions, and backend communication services.
+- `assets/`: Static assets such as images and global generic styles (`index.css`).
+- `auth/`: Authentication context provider, custom hooks, and session management logic.
+- `components/`: Reusable UI components including shared layouts, inputs, and forms.
+- `lib/`: Shared utilities, generalized configurations, and common validation schemas.
+- `pages/`: Top-level page components (`LoginPage`, `PlanPage`, etc.) corresponding to specific routes.
 
-## Expanding the ESLint configuration
+## Media Handling (MVP)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+For the MVP, video resources are served from local static files stored in `public/videos`.
+The frontend uses a mapping (see `src/lib/videoMapping.ts`) to match resource titles to local video
+files and render them using the HTML5 `<video>` player. If no local match is found, the application 
+falls back to external video links (e.g., YouTube). This approach allows fast development without 
+backend media storage and can be replaced later with backend-driven URLs.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Local Setup
+To run this project locally, ensure you have Node.js installed, then execute the following commands:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+```bash
+# Install dependencies
+npm install
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Start the local development server
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Environment Variables
+Create a `.env` file in the root directory (or use `.env.local` for local development) to configure environment-specific settings. Ensure the backend server is running on the corresponding port.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```env
+VITE_API_URL=http://localhost:8080
 ```
+
+## Production Build
+To test or prepare the application for production deployment, run the following command. This will output the optimized static assets into the `dist/` directory.
+
+```bash
+npm run build
+```
+
+## Main User Flow
+The primary application lifecycle for a typical user follows this sequence:
+**Register / Login** → **Complete Assessment** → **Generate Personalized Plan** → **View Plan & Resources** → **Track Process & Add Logs** → **Update User Profile**
+
+## Notes
+- Built as an MVP with focus on clean architecture, scalability, and user experience
